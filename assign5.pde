@@ -551,7 +551,7 @@ void drawDepthUI(){
 }
 
 void drawTimerUI(){
-	String timeString = // Requirement #4: Get the mm:ss string using String convertFramesToTimeString(int frames)
+	String timeString = convertFramesToTimeString(gameTimer); // Requirement #4: Get the mm:ss string using String convertFramesToTimeString(int frames)
  convertFramesToTimeString(gameTimer);
 	textAlign(LEFT, BOTTOM);
 
@@ -584,31 +584,69 @@ boolean isHit(float ax, float ay, float aw, float ah, float bx, float by, float 
 }
 
 String convertFramesToTimeString(int frames){	// Requirement #4
-frames=gameTimer/60;
-int mmm=frames/60;
-int sss=frames%60;
-String mm=nf(mmm,2);
-String ss=nf(sss,2);
-	return mm+":"+ss;
+ String ss = str(0);
+  String mm = str(0);
+  
+  if(frames/60>120){
+    mm = str(2);
+    ss = nf(frames/60-120,2);
+    return "0"+mm+":"+ss;
+  }
+  
+  if(frames/60>=119 && frames/60<=121){
+    return "02:00";
+  }
+    
+  if(frames/60>60 && frames/60<120){
+    mm = str(1);
+    ss = nf(frames/60-60,2);
+    return "0"+mm+":"+ss;
+  }
+  
+  if(frames/60>=59 && frames/60<=61){
+    return "01:00";
+  }
+  
+  if(frames/60>=0){
+    mm = str(0);
+    ss = nf(frames/60,2);
+    return "0"+mm+":"+ss;
+  }
+    return "0"+mm+":"+"0"+ss;
 }
 
 color getTimeTextColor(int frames){	// Requirement #5
-if(frames >= 7200){
+ if(frames/60>120){
     return #00ffff;
-  }else if(frames >= 3600){
+  }
+  
+  if(frames/60>=119 && frames/60<=121){
+    return #00ffff;
+  }
+  
+  if(frames/60<120 && frames/60>60){
     return #ffffff;
-  }else if(frames >= 1800){
+  }
+  
+  if(frames/60>=59 && frames/60<=61){
+    return #ffffff;
+  }
+    
+  if(frames/60<59 && frames/60>=30){
     return #ffcc00;
-  }else if(frames >= 600){
+  }
+  
+  if(frames/60<30 && frames/60>=10){
     return #ff6600;
   }
+  
+  if(frames/60<=10){
+    return #ff0000;
+  }
 
-  return #ff0000;
-
-
-
-
+  return #ffffff;
 }
+
 
 
       
